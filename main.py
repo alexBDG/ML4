@@ -7,6 +7,17 @@ Created on Sun Apr  7 18:45:02 2019
 
 
 import numpy as np
+import pandas as pd
+import csv
+
+
+#words = pd.read_table("glove.6B.50d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+#
+#def vec(w):
+#  return words.loc[w].as_matrix()
+#
+#print(vec("hello"))
+
 
 def prob(w):
     return 0.1
@@ -34,12 +45,14 @@ def find_frequence(data):
         print("no --> '' in the list")
   
     n = len(words)
-    P_word = np.zeros(n)
+#    P_word = np.zeros(n)
+    P_word = {}
     V_word = []
     word
     i=0
     for word in words:
-        P_word[i] = words.get(word)/n
+#        P_word[i] = words.get(word)/n
+        P_word[word] = words.get(word)/n
         V_word += [word]
         i+=1
     V_word = np.array(V_word)
@@ -53,7 +66,12 @@ data = ['This mini-project is due on April 12th at 11:59pm. Late submissions wil
         'You will submit your assignment on MyCourses as a group. As with previous mini-projects, you must register your group on MyCourses and any group member can submit.',
         'You are free to use any programming language or toolbox you want with this project.']
 
-def sentencize(data):
+data = pd.read_csv('SICK_test.txt', sep="\t") 
+
+
+
+
+def sentencize0(data):
     sentence = []
     if len(data) == 1:
         for dat in data.split('. '):
@@ -66,6 +84,27 @@ def sentencize(data):
         return sentence
     except:
         return sentence
+    
+
+def sentencize(data):
+    N = len(data)
+    sentences = np.zeros(2*N,dtype=str)
+    relatidness_score = np.zeros(N)
+    
+    for i in range(N):
+        sentences[i] = data.loc[i,"sentence_A"]
+        sentences[i+N] = data.loc[i,"sentence_B"]
+        relatidness_score[i] = data.loc[i,"relatedness_score"]
+        
+    return (sentences,relatidness_score)
+
+
+def cosine(x,y):
+    cosi = np.dot(x, y) / (np.sqrt(np.dot(x,x)) * np.sqrt(np.dot(y,y)))
+    if cosi < 0:
+        print("neg !")
+    return cosi
+        
 
 
 #sentences = np.array(['i am','you are','he is','i will yes']) #set of sentences S
@@ -74,28 +113,142 @@ def sentencize(data):
 #proba_word = np.array([0.2,0.1,0.1,0.1,0.1,0.1,0.1,0.1])
 
 
+def word_embedder(V_word):
+    words = pd.read_table("glove.6B.50d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+
+    word_embedding = np.zeros((len(V_word),50))
+    i=0
+    for word in V_word:
+        try:
+            word_embedding[i] = words.loc[word].as_matrix()
+        except:
+            print("eroor?")
+        i+=1
+    
+    return word_embedding
 
 
 
-def Algo1(a,data,word_embedding):
+
+
+def Algo2(a,data):
+    
+    (sentences,known_score) = sentencize(data)
+    (V_word,P_word) = find_frequence(sentences)
+    words = pd.read_table("glove.6B.50d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+    N = len(known_score)
+    
+    errors = []
+    V_sentence = np.zeros((2*N,50))
+    i=0
+    for s in sentences:
+        sume = 0
+        for w in s.split(" "):
+            w = w.lower()
+            try:
+                sume += a/(a+P_word.get(w))*words.loc[w].as_matrix()
+            except:
+                print("Unknown word : ",w)
+                print("----> sentence n°",i)
+                errors += [i]
+        V_sentence[i] = sume/len(s)
+        i+=1
+        
+    print("Errors with index :",[i for i in errors])
+    for i in range(len(errors)):
+        print(V_sentence[i])
+        
+#    V_sentence = np.array(V_sentence)
+#    V_sentence_t = V_sentence.transpose()
+    
+    print(V_sentence.shape)
+    uh, Sigma, vh = np.linalg.svd(V_sentence.transpose(), full_matrices=True)
+    print(uh.shape,Sigma.shape,vh.shape)
+
+        
+    u = np.zeros(uh.shape[0])
+    u[0] = Sigma[0]
+    
+    for s in range(2*N):
+        V_sentence[s] -= np.dot(u, np.dot(u.transpose() , V_sentence[s]))
+        
+    
+    unknown_score = np.zeros(N)
+    for i in range(N):
+        unknown_score[i] = 5*cosine(V_sentence[i],V_sentence[i+N])
+    
+    Pearson_s_matrix = np.corrcoef(unknown_score,known_score)
+    Pearson_s_coef = Pearson_s_matrix[0,1]
+    
+    return (Pearson_s_coef,V_sentence)
+
+
+
+#DONNER LE V_sentence DU AVERAGE GloVe =  Moy des embbeding vector des mots
+
+(Pearson_s_coef,V_sentence) = Algo2(1e-4,data)
+print("For the SICK_test, we have [Pearson_s_coef x 100] = ",Pearson_s_coef*100)
+
+
+def error_detector(V_sentence):
+    ERROR_index = []
+    for k in range(len(V_sentence)):
+        for i in range(len(V_sentence[0])):
+            x = V_sentence[k,i]
+            if (x is np.nan) or (x != x):
+                ERROR_index += [(k,i)]
+    return ERROR_index
+
+ERROR_index = error_detector(V_sentence)
+print("These index have nan value : \n",ERROR_index)
+
+
+
+def Algo1(a,data):
     
     sentences = sentencize(data)
     (V_word,P_word) = find_frequence(sentences)
+#    print(V_word)
+#    print(P_word)
+#    print(sentences)
+#    word_embedding = word_embedder(V_word)
+    words = pd.read_table("glove.6B.50d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+
     
-    V_sentence = np.zeros(len(sentences))
-    for s in len(sentences):
+#    V_sentence = np.zeros(len(sentences))
+    V_sentence = []
+    i=0
+    for s in sentences:
         sume = 0
-        for w in s:
-            sume += a/(a+P_word[w])*word_embedding[w]
-        V_sentence[s] = sume/len(s)  # len ???
+        for w in s.split(" "):
+            w = w.lower()
+            try:
+#                sume += a/(a+P_word[w])*word_embedding[w]
+                sume += a/(a+P_word.get(w))*words.loc[w].as_matrix()
+            except:
+                print("Unknown word : ",w)
+#        V_sentence[i] = sume/len(s)  # len ???
+        V_sentence += [sume/len(s)]  # len ???
+        i+=1
         
     X = np.array(V_sentence)
     X.transpose()
     
-    u, Sigma, vh = np.linalg.svd(X, full_matrices=True)
+    uh, Sigma, vh = np.linalg.svd(X, full_matrices=True)
     
-    u = Sigma[:,0]
-    for s in len(sentences):
+    print(uh.shape,Sigma.shape,vh.shape)
+    
+    u = np.zeros(vh.shape[0])
+    u[0] = Sigma[0]
+    
+    for s in range(len(sentences)):
         V_sentence[s] -= np.dot(u, np.dot(u.transpose() , V_sentence[s]))
     
     return V_sentence
+
+
+#V_sentence = Algo1(1e-4,data)
+
+def evaluate(V_sentence):
+    
+    np.corrcoef(x,y)
