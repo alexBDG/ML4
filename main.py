@@ -11,6 +11,7 @@ import pandas as pd
 import csv
 import frequency
 from nltk.tokenize import word_tokenize
+import time
 
 
 
@@ -118,13 +119,23 @@ def word_embedder(V_word):
 
 def Algo2(a,data):
     
+    start = time.time()
     (sentences,known_score) = sentencize(data)
+    print("############################################")
+    print("sentence are created, this took {0} seconds".format(time.time()-start))
+    start = time.time()
     pdist = frequency.load_file("enwiki_2184780")
-    words = pd.read_table("glove.6B.50d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+    print("############################################")
+    print("enwiki is loaded for the probas, this took {0} seconds".format(time.time()-start))
+    start = time.time()
+    words = pd.read_table("glove.6B.300d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+    print("############################################")
+    print("glove.6B.300d is loaded for the enbedding words, this took {0} seconds".format(time.time()-start))
     N = len(known_score)
     
-    errors = []
+    start = time.time()
     unknown_words = {}
+    unknown_probas = {}
     V_sentence = np.zeros((2*N,50))
     i=0
     for s in sentences:
@@ -140,31 +151,39 @@ def Algo2(a,data):
                         w = 'an'
                         p = pdist[w]
                     else:
-                        print("Unknown proba : ",w)
+#                        print("Unknown proba : ",w)
                         p = 0.
+                        try:
+                            unknown_probas[w] += 1
+                        except:
+                            unknown_probas[w] = 1
                 sume += a/(a+p)*words.loc[w].as_matrix()
             except:
-                print("Unknown word : ",w)
-                print("Unknown sentence : ",s_tolk,s)
-                unknown_words[w] += 1
-                errors += [i]
+#                print("Unknown word : ",w)
+#                print("Unknown sentence : ",s_tolk,s)
+                try:
+                    unknown_words[w] += 1
+                except:
+                    unknown_words[w] = 1
         V_sentence[i] = sume/len(s_tolk)
         i+=1
-        
-    print("This words are not in the <embedding words> database :",unknown_words)
-#    print("Errors with index :",[i for i in errors])
-#    for i in range(len(errors)):
-#        print(V_sentence[i])
-        
-#    V_sentence = np.array(V_sentence)
-#    V_sentence_t = V_sentence.transpose()
+    print("############################################")
+    print("sentence vectors are created, this took {0} seconds".format(time.time()-start))
+    print()
+    print("This words are not in the <embedding words> database :\n",unknown_words)
+    print()
+    print("This words are not in the <probas words> database :\n",unknown_probas)
     
+    start = time.time()
     print(V_sentence.shape)
     print(V_sentence.transpose().shape)
     uh, Sigma, vh = np.linalg.svd(V_sentence.transpose(), full_matrices=True)
     print(uh.shape,Sigma.shape,vh.shape)
+    print("############################################")
+    print("singular vector are found, this took {0} seconds".format(time.time()-start))
 
         
+    start = time.time()
     u = np.zeros(uh.shape[0])
     u[0] = Sigma[0]
     v = np.copy(u)
@@ -173,13 +192,15 @@ def Algo2(a,data):
 #    print(v)
 #    print(u)
 #    print(np.dot(v, u))
-    
+
     for s in range(2*N):
-#        V_sentence[s] -= np.dot( np.dot(v, u) , V_sentence[s])
-        V_sentence[s] -= Sigma[0]*Sigma[0]*V_sentence[s]
+#        V_sentence[s] -= np.dot( np.dot(v, u) , V_sentence[s]) #22.78111123433595
+        V_sentence[s] -= Sigma[0]*Sigma[0]*V_sentence[s] #64.99764426105642
+    print("############################################")
+    print("sentence vectors are updated, this took {0} seconds".format(time.time()-start))
 
         
-    
+    start = time.time()
     unknown_score = np.zeros(N)
     scores = np.zeros((N,2))
     for i in range(N):
@@ -188,6 +209,8 @@ def Algo2(a,data):
     
     Pearson_s_matrix = np.corrcoef(unknown_score,known_score)
     Pearson_s_coef = Pearson_s_matrix[0,1]
+    print("############################################")
+    print("pearson's coefficent is calculated, this took {0} seconds".format(time.time()-start))
     
     return (Pearson_s_coef,V_sentence,scores)
 
