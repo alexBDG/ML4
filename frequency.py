@@ -9,6 +9,7 @@ Created on Tue Apr  9 12:31:04 2019
 from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 import json
+import pandas as pd
 
 
 sent = 'This is an example sentence for this'
@@ -29,6 +30,17 @@ def create_dictionnary(sent):
 # To have the frequency of "word" ---> fdist.freq('word')
     
 
+def read_dictionnary(file_name):
+    fdist = pd.read_csv('enwiki-20190320-words-frequency.txt', sep=" ",header=None)
+    pdist = {}
+    sume = 0
+    for i in range(len(fdist)):
+        sume += fdist.loc[i,1]
+    for i in range(len(fdist)):
+        pdist[fdist.loc[i,0]] = fdist.loc[i,1]/sume
+    return pdist
+    
+
 
     
 def save_file(pdist,data_name):
@@ -44,8 +56,6 @@ def load_file(data_name):
     return pdist
 
 
-pdist = create_dictionnary(sent)
-save_file(pdist,"test")
-pdist_test = load_file("test")
-print(pdist)
-print(pdist_test)
+#pdist = read_dictionnary(sent)
+#save_file(pdist,"enwiki_2184780")
+#pdist_test = load_file("enwiki_2184780")
