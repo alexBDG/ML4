@@ -53,7 +53,7 @@ def Algo(a=1e-3,task="SICK 2014",methode="WR"):
         print("NOT DEFINED !")
         assert("error")
     print("############################################")
-    print("sentence are created, this took {0} seconds".format(round(time.time()-start,3)))
+    print("sentence are created from {0}, this took {1} seconds".format(task,round(time.time()-start,3)))
     
     start = time.time()
     pdist = frequency.load_file("enwiki_2184780")
@@ -152,10 +152,13 @@ def Algo(a=1e-3,task="SICK 2014",methode="WR"):
 
 #DONNER LE V_sentence DU AVERAGE GloVe =  Moy des embbeding vector des mots
 
-(Pearson_s_coef,delta_t,V_sentence,scores) = Algo(1e-3)
-print("For the STS12_test, we have [Pearson_s_coef x 100] = ",Pearson_s_coef*100)
+def run():
+    
+    (Pearson_s_coef,delta_t,V_sentence,scores) = Algo(1e-3)
+    print("For the STS12_test, we have [Pearson_s_coef x 100] = ",Pearson_s_coef*100)
+    
+    ERROR_index = function.error_detector(V_sentence)
+    print("These index have nan value : \n",ERROR_index)
+    
 
-
-ERROR_index = function.error_detector(V_sentence)
-print("These index have nan value : \n",ERROR_index)
 
