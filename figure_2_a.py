@@ -9,15 +9,26 @@ import Sentence_embedding
 
 
 
-curve = "GloVe_WR"
+curve = "GloVe+avg"
 
-if curve == "GloVe_WR":
-    with open("figure_2_a\GloVe+WR.txt","w") as file:
+if curve == "GloVe+WR":
+    with open("figure_2_a\{0}.txt".format(curve),"w") as file:
         file.write("a Pearson\n")
         for i in [1,2,3,4,5]:
             a = 10**(-i)
-            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012")
+            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR")
             file.write("{0} {1}\n".format(a,Pearson_s_coef))
             a = 3*10**(-i)
-            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012")
+            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR")
+            file.write("{0} {1}\n".format(a,Pearson_s_coef))
+            
+elif curve == "GloVe+avg":
+    with open("figure_2_a\{0}.txt".format(curve),"w") as file:
+        file.write("a Pearson\n")
+        (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(1,"STS 2012","avg")
+        file.write("{0} {1}\n".format(a,Pearson_s_coef))
+        for i in [1,2,3,4,5]:
+            a = 10**(-i)
+            file.write("{0} {1}\n".format(a,Pearson_s_coef))
+            a = 3*10**(-i)
             file.write("{0} {1}\n".format(a,Pearson_s_coef))

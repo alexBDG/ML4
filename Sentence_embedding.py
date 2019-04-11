@@ -18,7 +18,7 @@ import os
     
         
 
-def Algo(a,task="SICK 2014"):
+def Algo(a=1e-3,task="SICK 2014",methode="WR"):
     ini = time.time()
     path = os.getcwd()
     
@@ -90,7 +90,10 @@ def Algo(a,task="SICK 2014"):
                             unknown_probas[w] += 1
                         except:
                             unknown_probas[w] = 1
-                sume += a/(a+p)*words.loc[w].values
+                if methode == "avg":
+                    sume += words.loc[w].values
+                elif methode == "WR":
+                    sume += a/(a+p)*words.loc[w].values
             except:
                 try:
                     unknown_words[w] += 1
