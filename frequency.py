@@ -31,7 +31,7 @@ def create_dictionnary(sent):
     
 
 def read_dictionnary(file_name):
-    fdist = pd.read_csv('enwiki-20190320-words-frequency.txt', sep=" ",header=None)
+    fdist = pd.read_csv('word_frequency\wikipedia-word-frequency-master\results\enwiki-20190320-words-frequency.txt', sep=" ",header=None)
     pdist = {}
     sume = 0
     for i in range(len(fdist)):
