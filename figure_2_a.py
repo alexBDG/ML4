@@ -17,23 +17,44 @@ if not os.path.exists(os.getcwd()+"\\figure_2_a"):
     os.makedirs("figure_2_a")
     
 
-curve = "PSL"
+curve = "SL"
 
 if curve == "GloVe+WR":
     with open("figure_2_a\{0}.txt".format(curve),"w") as file:
         file.write("a Pearson\n")
         for i in [1,2,3,4,5]:
             a = 3*10**(-i)
-            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR")
+            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR","GloVe")
             file.write("{0} {1}\n".format(a,Pearson_s_coef))
             a = 10**(-i)
-            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR")
+            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR","GloVe")
             file.write("{0} {1}\n".format(a,Pearson_s_coef))
             
 elif curve == "GloVe":
     with open("figure_2_a\{0}.txt".format(curve),"w") as file:
         file.write("a Pearson\n")
-        (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(1,"STS 2012","avg")
+        (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(1,"STS 2012","avg","GloVe")
+        for i in [1,2,3,4,5]:
+            a = 3*10**(-i)
+            file.write("{0} {1}\n".format(a,Pearson_s_coef))
+            a = 10**(-i)
+            file.write("{0} {1}\n".format(a,Pearson_s_coef))
+            
+elif curve == "PSL+WR":
+    with open("figure_2_a\{0}.txt".format(curve),"w") as file:
+        file.write("a Pearson\n")
+        for i in [1,2,3,4,5]:
+            a = 3*10**(-i)
+            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR","PSL")
+            file.write("{0} {1}\n".format(a,Pearson_s_coef))
+            a = 10**(-i)
+            (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","WR","PSL")
+            file.write("{0} {1}\n".format(a,Pearson_s_coef))
+            
+elif curve == "PSL":
+    with open("figure_2_a\{0}.txt".format(curve),"w") as file:
+        file.write("a Pearson\n")
+        (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(1,"STS 2012","avg","PSL")
         for i in [1,2,3,4,5]:
             a = 3*10**(-i)
             file.write("{0} {1}\n".format(a,Pearson_s_coef))
@@ -44,11 +65,11 @@ elif curve == "GloVe":
             
             
 def plot_fig2a():
-    plots = [["PSL+WR","blue",""],
-             ["PSL","blue","dashed"],
+    plots = [["PSL+WR","blue","solid"],
              ["GloVe+WR","green","solid"],
-             ["GloVe","green","dashed"],
              ["SN+WR","orange","solid"],
+             ["PSL","blue","dashed"],
+             ["GloVe","green","dashed"],
              ["SN","orange","dashed"]]
     
     plt.figure()
