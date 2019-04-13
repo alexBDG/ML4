@@ -6,32 +6,13 @@ Created on Tue Apr  9 12:31:04 2019
 """
 
 
-from nltk.tokenize import word_tokenize
-from nltk.probability import FreqDist
 import json
 import pandas as pd
 
-
-sent = 'This is an example sentence for this'
-
-def create_dictionnary(sent):
-    fdist = FreqDist()
-    for word in word_tokenize(sent):
-        fdist[word.lower()] += 1
-    print(fdist.freq("this"))
-        
-    pdist = {}
-    for word in fdist:
-        pdist[word] = fdist.freq(word)
-        
-    return pdist
-    
-    
-# To have the frequency of "word" ---> fdist.freq('word')
     
 
-def read_dictionnary(file_name):
-    fdist = pd.read_csv('word_frequency\wikipedia-word-frequency-master\results\enwiki-20190320-words-frequency.txt', sep=" ",header=None)
+def read_dictionnary():
+    fdist = pd.read_csv('word_frequency\enwiki-20190320-words-frequency.txt', sep=" ",header=None)
     pdist = {}
     sume = 0
     for i in range(len(fdist)):
@@ -39,7 +20,6 @@ def read_dictionnary(file_name):
     for i in range(len(fdist)):
         pdist[fdist.loc[i,0]] = fdist.loc[i,1]/sume
     return pdist
-    
 
 
     

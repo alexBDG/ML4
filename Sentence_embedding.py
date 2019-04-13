@@ -7,42 +7,45 @@ Created on Wed Apr 10 19:40:15 2019
 
 
 import numpy as np
-import pandas as pd
-import csv
 import frequency
 import time
 import function
 import sys
 import os
+import environment
 
     
         
 
-def Algo(a=1e-3,task="SICK 2014",methode="WR"):
+def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
+    environment.check_env()
+    
     ini = time.time()
     path = os.getcwd()
     
     if task == "STS 2012":
-        file_name = path + r"\dataset-sts-master\data\sts\semeval-sts\2012\MSRpar.test.tsv"
+        file_name = path + r"\sts\semeval-sts\2012\MSRpar.test.tsv"
         task_family = "STS"
-    if task == "STS 2013":
-        file_name = path + r"\dataset-sts-master\data\sts\semeval-sts\2013\headlines.test.tsv"
+    elif task == "STS 2013":
+        file_name = path + r"\sts\semeval-sts\2013\headlines.test.tsv"
         task_family = "STS"
-    if task == "STS 2014":
-        file_name = path + r"\dataset-sts-master\data\sts\semeval-sts\2014\headlines.test.tsv"
+    elif task == "STS 2014":
+        file_name = path + r"\sts\semeval-sts\2014\headlines.test.tsv"
         task_family = "STS"
-    if task == "STS 2015":
-        file_name = path + r"\dataset-sts-master\data\sts\semeval-sts\2015\headlines.test.tsv"
+    elif task == "STS 2015":
+        file_name = path + r"\sts\semeval-sts\2015\headlines.test.tsv"
         task_family = "STS"
-    if task == "STS 2016":
-        file_name = path + r"\dataset-sts-master\data\sts\semeval-sts\2016\headlines.test.tsv"
+    elif task == "STS 2016":
+        file_name = path + r"\sts\semeval-sts\2016\headlines.test.tsv"
         task_family = "STS"
-    if task == "SICK 2014":
-        file_name = path + r"\dataset-sts-master\data\sts\sick2014\SICK_test_annotated.txt"
+    elif task == "SICK 2014":
+        file_name = path + r"\sts\sick2014\SICK_test_annotated.txt"
         task_family = "SICK"
-    if task == "Twitter 2015":
-        file_name = path + r"\dataset-sts-master\data\sts\semeval-sts\2012\MSRpar.test.tsv"
+    elif task == "Twitter 2015":
+        file_name = path + r"\sts\semeval-sts\2012\MSRpar.test.tsv"
         task_family = "Twitter"
+    else:
+        sys.exit("task unknown !")
     
     start = time.time()
     if task_family == "STS":
@@ -59,10 +62,14 @@ def Algo(a=1e-3,task="SICK 2014",methode="WR"):
     pdist = frequency.load_file("enwiki_2184780")
     print("############################################")
     print("enwiki is loaded for the probas, this took {0} seconds".format(round(time.time()-start,3)))
+    
     start = time.time()
-    words = pd.read_table("word_embedding\glove.6B.300d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+    if word_embedding == "GloVe":
+        words = function.load_GloVe('6B.300d')
+    elif word_embedding == "PSL":
+        words = function.load_PSL()
     print("############################################")
-    print("glove.42B.300d is loaded for the enbedding words, this took {0} seconds".format(round(time.time()-start,3)))
+    print("embedding words are created from {0}, this took {1} seconds".format(word_embedding,round(time.time()-start,3)))
     N = len(known_score)
     
     start = time.time()
@@ -90,10 +97,21 @@ def Algo(a=1e-3,task="SICK 2014",methode="WR"):
                             unknown_probas[w] += 1
                         except:
                             unknown_probas[w] = 1
+                            
                 if methode == "avg":
-                    sume += words.loc[w].values
+                    factor = 1.
                 elif methode == "WR":
-                    sume += a/(a+p)*words.loc[w].values
+                    factor = a/(a+p)
+                else:
+                    sys.exit("methode unknown !")
+                    
+                if word_embedding == "GloVe":
+                    sume += factor*words.loc[w].values
+                elif word_embedding == "PSL":
+                    sume += factor*words[w]
+                else:
+                    sys.exit("word_embedding unknown !")
+                    
             except:
                 try:
                     unknown_words[w] += 1
@@ -152,13 +170,14 @@ def Algo(a=1e-3,task="SICK 2014",methode="WR"):
 
 #DONNER LE V_sentence DU AVERAGE GloVe =  Moy des embbeding vector des mots
 
-def run():
+def run(a=1e-3,task="STS 2012",methode="avg",word_embedding="GloVe"):
     
-    (Pearson_s_coef,delta_t,V_sentence,scores) = Algo(1e-3)
+    (Pearson_s_coef,delta_t,V_sentence,scores) = Algo(a,task,methode,word_embedding)
     print("For the STS12_test, we have [Pearson_s_coef x 100] = ",Pearson_s_coef*100)
     
     ERROR_index = function.error_detector(V_sentence)
     print("These index have nan value : \n",ERROR_index)
+    
     
 
 

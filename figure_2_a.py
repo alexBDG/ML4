@@ -8,8 +8,14 @@ Created on Thu Apr 11 13:54:01 2019
 import Sentence_embedding
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 
+
+
+if not os.path.exists(os.getcwd()+"\\figure_2_a"):
+    os.makedirs("figure_2_a")
+    
 
 curve = "PSL"
 
@@ -57,9 +63,11 @@ def plot_fig2a():
     plt.xlabel("Weighting parameter a")
     plt.ylabel("Pearson's coefficient")
     plt.legend(loc='lower right',ncol=2)
-    plt.show()
+    plt.xlim(1e-5,1e0)
+    plt.tick_params(top=1,right=1,direction='in',which='both')
     plt.savefig(r"figure_2_a\figure_2_a.png")
+    plt.show()
     plt.close()
     
-plot_fig2a()
+
             

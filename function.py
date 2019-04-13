@@ -8,21 +8,8 @@ Created on Thu Apr 11 13:42:40 2019
 import numpy as np
 from nltk.tokenize import word_tokenize
 import codecs
-
-
-def sentencize(data):
-    N = len(data)
-    sentences_A = []
-    sentences_B = []
-    relatidness_score = np.zeros(N)
-    
-    for i in range(N):
-        sentences_A += [data.loc[i,"sentence_A"]]
-        sentences_B += [data.loc[i,"sentence_B"]]
-        relatidness_score[i] = data.loc[i,"relatedness_score"]
-        
-    return (sentences_A+sentences_B,relatidness_score)
-
+import pandas as pd
+import csv
 
 
 
@@ -46,7 +33,7 @@ def load_sts(dsfile, skip_unlabeled=True):
             s1.append(word_tokenize(s1x))
     return (s0+s1, np.array(labels))
 
-
+    
 
 
 def load_sick2014(dsfile, mode='relatedness'):
@@ -84,13 +71,35 @@ def load_sick2014(dsfile, mode='relatedness'):
 
 
 
+def load_PSL():
+    word_embedding = {}
+    with codecs.open('word_embedding\\paragram_300_sl999.txt', 'rb', encoding="utf-8", errors='replace') as f:
+        for line in f:
+            try:
+                line_vec = line.rstrip().split(' ')
+            except:
+                line.encode('utf-8').strip()
+                line_vec = line.rstrip().split(' ')
+            word_embedding[line_vec[0]] = np.array(line_vec[1:],dtype=float)
+    return word_embedding
+
+
+
+def load_GloVe(version="6B.300d"):
+#    word_embedding = {}
+    word_embedding = pd.read_table("word_embedding\\glove.{0}.txt".format(version), sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+#    for i in range(len(words)):
+#        word = words.index[i]
+#        word_embedding[word] = words.loc[word].values
+    return word_embedding
+
+
 
 def cosine(x,y):
     cosi = np.dot(x, y) / (np.sqrt(np.dot(x,x)) * np.sqrt(np.dot(y,y)))
     if cosi < 0:
         print("neg !")
     return cosi
-
 
 
 
@@ -102,15 +111,3 @@ def error_detector(V_sentence):
             if (x is np.nan) or (x != x):
                 ERROR_index += [(k,i)]
     return ERROR_index
-
-
-
-def custom_tokenize(text):
-    if not text:
-        print('The text to be tokenized is a None type. Defaulting to blank string.')
-        text = ''
-    if not str:
-        print('The text to be tokenized is not a string. Defaulting to blank string.')
-        text = ''
-    return word_tokenize(text)
-
