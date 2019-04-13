@@ -14,7 +14,27 @@ import sys
 import os
 import environment
 
-    
+
+
+#
+#   Argument of the function <Algo>
+#   
+#   --> a
+#   A number, parameter of the weight factor of the method proposed
+#   by the paper
+#
+#   --> task
+#   Possible values :   "STS 2012", "STS 2013", "STS 2014",
+#                       "STS 2015", "SICK 2014"
+#
+#   --> methode
+#   Possible values :   "WR", "avg"
+#
+#   --> word_embedding
+#   Possible values :   "GloVe", "PSL"
+#
+
+
         
 
 def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
@@ -75,7 +95,7 @@ def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
     start = time.time()
     unknown_words = {}
     unknown_probas = {}
-    V_sentence = np.zeros((2*N,words.shape[1]))
+    V_sentence = np.zeros((2*N,300))
     i=0
     for s in sentences:
         ph = "\rProgression: {0} % ".format(round(float(100*i)/float(2*N-1),3))
