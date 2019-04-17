@@ -4,15 +4,15 @@ Mini-Projet 4 - Task 1
 
 Alexandre Banon; Vincent Delmas; Michael Haaf
 
-\\
 
-Paper :
+
+## Paper :
 
 Sanjeev Arora, Yingyu Liang, and Tengyu Ma. 2017. A simple but tough-to-beat baseline for sentence embed-dings. In 5th International Conference on Learning Representations, ICLR 2017, Toulon, France, April 24-26, 2017, Conference Track Proceedings.
 
 
 
-Files :
+## Files :
 
 <Sentence_embedding.py> contains our reproduction of the algorithm 1 from the paper (Arora et al.,2017).
 
