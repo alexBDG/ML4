@@ -41,7 +41,7 @@ numpy, time, sys, os, math, nltk, codecs, pandas, csv, matplotlib
 [enwiki](https://github.com/IlyaSemenov/wikipedia-word-frequency/tree/master/results) database from Wikipedia articles
 
 
-## Parameters of the function <Algo> :
+## Parameters of the function [Algo] :
   
 [a] A number, parameter of the weight factor of the method proposed by the paper
 
