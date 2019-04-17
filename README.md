@@ -24,13 +24,13 @@ Sanjeev Arora, Yingyu Liang, and Tengyu Ma. 2017. A simple but tough-to-beat bas
 
 
 
-Python libraries :
+## Python libraries :
 
 numpy, time, sys, os, math, nltk, codecs, pandas, csv, matplotlib
 
 
 
-Link for Dowloading the data :
+## Links for Dowloading the data :
 
 STS (2012 to 2015) and SICK 2014 on the following Github : https://github.com/brmson/dataset-sts/tree/master/data/sts
 
@@ -42,7 +42,7 @@ enwiki database from Wikipedia articles : https://github.com/IlyaSemenov/wikiped
 
 
 
-Parameters of the function <Algo> :
+## Parameters of the function <Algo> :
   
 <a>
 A number, parameter of the weight factor of the method proposed by the paper
