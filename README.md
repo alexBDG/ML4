@@ -2,9 +2,7 @@
 Mini-Projet 4 - Task 1
 
 
-Alexandre Banon
-Vincent Delmas
-Michael Haaf
+Alexandre Banon; Vincent Delmas; Michael Haaf
 
 
 
