@@ -65,16 +65,16 @@ elif curve == "PSL":
                 a = 10**(-i)
                 file.write("{0} {1}\n".format(a,Pearson_s_coef))
             
-elif curve == "GloVe+mixt":
+elif curve == "GloVe+bin":
     if not os.path.exists("figure_2_a\{0}.txt".format(curve)):
         with open("figure_2_a\{0}.txt".format(curve),"w") as file:
             file.write("a Pearson\n")
             for i in [1,2,3,4,5]:
                 a = 3*10**(-i)
-                (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","mixt","GloVe")
+                (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","bin","GloVe")
                 file.write("{0} {1}\n".format(a,Pearson_s_coef))
                 a = 10**(-i)
-                (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","mixt","GloVe")
+                (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","bin","GloVe")
                 file.write("{0} {1}\n".format(a,Pearson_s_coef))
             
 elif curve == "GloVe+h":
@@ -87,6 +87,18 @@ elif curve == "GloVe+h":
                 file.write("{0} {1}\n".format(a,Pearson_s_coef))
                 a = 10**(-i)
                 (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","h","GloVe")
+                file.write("{0} {1}\n".format(a,Pearson_s_coef))
+                
+elif curve == "GloVe+g":
+    if not os.path.exists("figure_2_a\{0}.txt".format(curve)):
+        with open("figure_2_a\{0}.txt".format(curve),"w") as file:
+            file.write("a Pearson\n")
+            for i in [1,2,3,4,5]:
+                a = 3*10**(-i)
+                (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","g","GloVe")
+                file.write("{0} {1}\n".format(a,Pearson_s_coef))
+                a = 10**(-i)
+                (Pearson_s_coef,delta_t,V_sentence,scores) = Sentence_embedding.Algo(a,"STS 2012","g","GloVe")
                 file.write("{0} {1}\n".format(a,Pearson_s_coef))
 
             

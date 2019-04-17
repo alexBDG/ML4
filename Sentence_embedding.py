@@ -62,9 +62,6 @@ def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
     elif task == "SICK 2014":
         file_name = path + r"\sts\sick2014\SICK_test_annotated.txt"
         task_family = "SICK"
-    elif task == "Twitter 2015":
-        file_name = path + r"\sts\semeval-sts\2012\MSRpar.test.tsv"
-        task_family = "Twitter"
     else:
         sys.exit("task unknown !")
     
