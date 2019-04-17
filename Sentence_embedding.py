@@ -13,6 +13,7 @@ import function
 import sys
 import os
 import environment
+import math
 
 
 
@@ -28,7 +29,7 @@ import environment
 #                       "STS 2015", "SICK 2014"
 #
 #   --> methode
-#   Possible values :   "WR", "avg"
+#   Possible values :   "WR", "avg", "bin", "g", "h"
 #
 #   --> word_embedding
 #   Possible values :   "GloVe", "PSL"
@@ -122,6 +123,22 @@ def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
                     factor = 1.
                 elif methode == "WR":
                     factor = a/(a+p)
+                elif methode == "bin":
+                    if p<a:
+                        factor = 1.
+                    else:
+                        factor = 0.
+                elif methode == "g":
+                    if p<a:
+                        factor = 1.
+                    else:
+                        factor = 1. - (1/(1-a))*(p-a)
+                elif methode == "h":
+                    if p<a:
+                        factor = 1.
+                    else:
+                        loga = -math.log10(a)
+                        factor = 1. - (1/loga)*(math.log10(p)+loga)
                 else:
                     sys.exit("methode unknown !")
                     
@@ -139,13 +156,13 @@ def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
                     unknown_words[w] = 1
         V_sentence[i] = sume/len(s_tolk)
         i+=1
-    print("############################################")
+    print("\n############################################")
     print("sentence vectors are created, this took {0} seconds".format(round(time.time()-start,3)))
     print()
-    print("This words are not in the <embedding words> database :\n",unknown_words)
-    print()
-    print("This words are not in the <probas words> database :\n",unknown_probas)
-    print()
+#    print("This words are not in the <embedding words> database :\n",unknown_words)
+#    print()
+#    print("This words are not in the <probas words> database :\n",unknown_probas)
+#    print()
     
     start = time.time()
     uh, Sigma, vh = np.linalg.svd(V_sentence.transpose(), full_matrices=True)
@@ -193,7 +210,7 @@ def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
 def run(a=1e-3,task="STS 2012",methode="avg",word_embedding="GloVe"):
     
     (Pearson_s_coef,delta_t,V_sentence,scores) = Algo(a,task,methode,word_embedding)
-    print("For the STS12_test, we have [Pearson_s_coef x 100] = ",Pearson_s_coef*100)
+    print("For {0}, we have [Pearson_s_coef x 100] = ".format(task),Pearson_s_coef*100)
     
     ERROR_index = function.error_detector(V_sentence)
     print("These index have nan value : \n",ERROR_index)
