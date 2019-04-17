@@ -45,9 +45,9 @@ numpy, time, sys, os, math, nltk, codecs, pandas, csv, matplotlib
   
 <a> A number, parameter of the weight factor of the method proposed by the paper
 
-<task> Possible values :   "STS 2012", "STS 2013", "STS 2014", "STS 2015", "SICK 2014"
+\<task> Possible values :   "STS 2012", "STS 2013", "STS 2014", "STS 2015", "SICK 2014"
 
-<methode> Possible values :   "WR", "avg", "bin", "g", "h"
+[methode] Possible values :   "WR", "avg", "bin", "g", "h"
 
 <word_embedding> Possible values :   "GloVe", "PSL"
 
