@@ -45,22 +45,22 @@ def Algo(a=1e-3,task="STS 2012",methode="WR",word_embedding="GloVe"):
     path = os.getcwd()
     
     if task == "STS 2012":
-        file_name = path + r"\sts\semeval-sts\2012\MSRpar.test.tsv"
+        file_name = path + r"/sts/semeval-sts/2012/MSRpar.test.tsv"
         task_family = "STS"
     elif task == "STS 2013":
-        file_name = path + r"\sts\semeval-sts\2013\headlines.test.tsv"
+        file_name = path + r"/sts/semeval-sts/2013/headlines.test.tsv"
         task_family = "STS"
     elif task == "STS 2014":
-        file_name = path + r"\sts\semeval-sts\2014\headlines.test.tsv"
+        file_name = path + r"/sts/semeval-sts/2014/headlines.test.tsv"
         task_family = "STS"
     elif task == "STS 2015":
-        file_name = path + r"\sts\semeval-sts\2015\headlines.test.tsv"
+        file_name = path + r"/sts/semeval-sts/2015/headlines.test.tsv"
         task_family = "STS"
     elif task == "STS 2016":
-        file_name = path + r"\sts\semeval-sts\2016\headlines.test.tsv"
+        file_name = path + r"/sts/semeval-sts/2016/headlines.test.tsv"
         task_family = "STS"
     elif task == "SICK 2014":
-        file_name = path + r"\sts\sick2014\SICK_test_annotated.txt"
+        file_name = path + r"/sts/sick2014/SICK_test_annotated.txt"
         task_family = "SICK"
     else:
         sys.exit("task unknown !")

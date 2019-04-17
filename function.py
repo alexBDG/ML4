@@ -73,7 +73,7 @@ def load_sick2014(dsfile, mode='relatedness'):
 
 def load_PSL():
     word_embedding = {}
-    with codecs.open('word_embedding\\paragram_300_sl999.txt', 'rb', encoding="utf-8", errors='replace') as f:
+    with codecs.open('word_embedding/paragram_300_sl999.txt', 'rb', encoding="utf-8", errors='replace') as f:
         for line in f:
             try:
                 line_vec = line.rstrip().split(' ')
@@ -87,7 +87,7 @@ def load_PSL():
 
 def load_GloVe(version="6B.300d"):
 #    word_embedding = {}
-    word_embedding = pd.read_table("word_embedding\\glove.{0}.txt".format(version), sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+    word_embedding = pd.read_table("word_embedding/glove.{0}.txt".format(version), sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
 #    for i in range(len(words)):
 #        word = words.index[i]
 #        word_embedding[word] = words.loc[word].values
