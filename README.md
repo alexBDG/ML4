@@ -32,14 +32,13 @@ numpy, time, sys, os, math, nltk, codecs, pandas, csv, matplotlib
 
 ## Links for Dowloading the data :
 
-STS (2012 to 2015) and SICK 2014 on the following Github : https://github.com/brmson/dataset-sts/tree/master/data/sts
+[STS](https://github.com/brmson/dataset-sts/tree/master/data/sts) (2012 to 2015) and SICK 2014
 
-GloVe embedding pre-trained vectors : http://nlp.stanford.edu/data/glove.6B.zip
+[GloVe](http://nlp.stanford.edu/data/glove.6B.zip) embedding pre-trained vectors
 
-PSL embedding pre-trained vectors : https://drive.google.com/file/d/0B9w48e1rj-MOck1fRGxaZW1LU2M/view?usp=sharing
+[PSL](https://drive.google.com/file/d/0B9w48e1rj-MOck1fRGxaZW1LU2M/view?usp=sharing) embedding pre-trained vectors
 
-enwiki database from Wikipedia articles : https://github.com/IlyaSemenov/wikipedia-word-frequency/tree/master/results
-
+[enwiki](https://github.com/IlyaSemenov/wikipedia-word-frequency/tree/master/results) database from Wikipedia articles
 
 
 ## Parameters of the function <Algo> :
