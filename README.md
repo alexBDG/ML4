@@ -4,15 +4,15 @@ Mini-Projet 4 - Task 1
 
 Alexandre Banon; Vincent Delmas; Michael Haaf
 
+\\
 
-
-#Paper :
+Paper :
 
 Sanjeev Arora, Yingyu Liang, and Tengyu Ma. 2017. A simple but tough-to-beat baseline for sentence embed-dings. In 5th International Conference on Learning Representations, ICLR 2017, Toulon, France, April 24-26, 2017, Conference Track Proceedings.
 
 
 
-#Files :
+Files :
 
 <Sentence_embedding.py> contains our reproduction of the algorithm 1 from the paper (Arora et al.,2017).
 
@@ -24,13 +24,13 @@ Sanjeev Arora, Yingyu Liang, and Tengyu Ma. 2017. A simple but tough-to-beat bas
 
 
 
-#Python libraries :
+Python libraries :
 
 numpy, time, sys, os, math, nltk, codecs, pandas, csv, matplotlib
 
 
 
-#Link for Dowloading the data :
+Link for Dowloading the data :
 
 STS (2012 to 2015) and SICK 2014 on the following Github : https://github.com/brmson/dataset-sts/tree/master/data/sts
 
@@ -42,7 +42,7 @@ enwiki database from Wikipedia articles : https://github.com/IlyaSemenov/wikiped
 
 
 
-#Parameters of the function <Algo> :
+Parameters of the function <Algo> :
   
 <a>
 A number, parameter of the weight factor of the method proposed by the paper
